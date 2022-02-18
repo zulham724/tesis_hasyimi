@@ -87,7 +87,7 @@ class RiverSpotController extends Controller
     public function convert_excel_to_db()
     {
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-        $spreadsheet = $reader->load("coba.xlsx");
+        $spreadsheet = $reader->load("Ciliwung.xlsx");
         // return $spreadsheet;
         $worksheet = $spreadsheet->getActiveSheet();
         $rows = $worksheet->toArray();
@@ -100,15 +100,15 @@ class RiverSpotController extends Controller
             if($i != 1){
                 $name = $spreadsheet->getActiveSheet()
                 ->getCell('A'.$i)->getValue();
-                $date = $val = $spreadsheet->getActiveSheet()
-                ->getCell('E'.$i)->getValue();
-                $water_level = $val = $spreadsheet->getActiveSheet()
+                $date = date('Y-m-d H:i:s',strtotime($spreadsheet->getActiveSheet()
+                ->getCell('E'.$i)->getFormattedValue()));
+                $water_level = $spreadsheet->getActiveSheet()
                 ->getCell('F'.$i)->getValue();
-                $water_status = $val = $spreadsheet->getActiveSheet()
+                $water_status = $spreadsheet->getActiveSheet()
                 ->getCell('G'.$i)->getValue();
-                $id = $val = $spreadsheet->getActiveSheet()
+                $id = $spreadsheet->getActiveSheet()
                 ->getCell('H'.$i)->getValue();
-                if($date != null){
+                if($date && $water_level){
                     $data = RiverSpot::firstOrNew(['id'=>$id]);
                     $data->name = $name;
                     $data->date = $date;
